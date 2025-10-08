@@ -9,6 +9,11 @@ export default function Home() {
   const handlePayment = async () => {
     setIsLoading(true);
     try {
+      // Check if Razorpay key is available
+      if (!process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID) {
+        throw new Error('Payment system not configured. Please contact support.');
+      }
+
       const response = await fetch('/api/payment/create-order', {
         method: 'POST',
         headers: {
@@ -23,36 +28,66 @@ export default function Home() {
         throw new Error(data.message || 'Failed to create order');
       }
 
-      // Load Razorpay script
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => {
-        const options = {
-          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-          amount: data.order.amount,
-          currency: data.order.currency,
-          name: 'UNSTUCK Masterclass',
-          description: '2-Hour Masterclass to Hack Your Lazy Brain into Maximum Productivity',
-          order_id: data.order.id,
-          handler: function (response) {
-            // Payment successful, redirect to success page
-            window.location.href = '/success';
-          },
-          theme: {
-            color: '#4F46E5',
-          },
+      // Load Razorpay script dynamically
+      if (!window.Razorpay) {
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.async = true;
+        script.onload = () => openRazorpay(data.order);
+        script.onerror = () => {
+          throw new Error('Failed to load payment gateway');
         };
-
-        const rzp = new window.Razorpay(options);
-        rzp.open();
-      };
-      document.body.appendChild(script);
+        document.body.appendChild(script);
+      } else {
+        openRazorpay(data.order);
+      }
     } catch (error) {
+      console.error('Payment error:', error);
       alert('Payment failed: ' + error.message);
     } finally {
       setIsLoading(false);
       setShowPaymentModal(false);
     }
+  };
+
+  const openRazorpay = (order) => {
+    const options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      amount: order.amount,
+      currency: order.currency,
+      name: 'UNSTUCK Masterclass',
+      description: '2-Hour Masterclass to Hack Your Lazy Brain into Maximum Productivity',
+      order_id: order.id,
+      handler: function (response) {
+        // Payment successful, redirect to success page
+        console.log('Payment successful:', response);
+        window.location.href = '/success?payment_id=' + response.razorpay_payment_id;
+      },
+      prefill: {
+        name: 'UNSTUCK Student',
+        email: 'student@example.com',
+        contact: '9999999999'
+      },
+      notes: {
+        address: 'UNSTUCK Masterclass Enrollment',
+        course: 'UNSTUCK Masterclass'
+      },
+      theme: {
+        color: '#4F46E5',
+      },
+      modal: {
+        ondismiss: function() {
+          console.log('Payment modal dismissed');
+        }
+      }
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.on('payment.failed', function (response) {
+      console.error('Payment failed:', response.error);
+      alert('Payment failed: ' + response.error.description);
+    });
+    rzp.open();
   };
 
   return (

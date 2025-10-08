@@ -1,11 +1,20 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export default function SuccessPage() {
   const [countdown, setCountdown] = useState(5);
+  const [paymentId, setPaymentId] = useState('');
+  const searchParams = useSearchParams();
 
   useEffect(() => {
+    // Get payment ID from URL if available
+    const paymentIdParam = searchParams.get('payment_id');
+    if (paymentIdParam) {
+      setPaymentId(paymentIdParam);
+    }
+
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -17,7 +26,7 @@ export default function SuccessPage() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [searchParams]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-900 via-blue-900 to-purple-900 p-6">
@@ -36,6 +45,11 @@ export default function SuccessPage() {
             <p className="text-gray-700 font-medium">
               🎉 Congratulations! You've taken the first step to transform your productivity.
             </p>
+            {paymentId && (
+              <p className="text-sm text-gray-600 mt-2">
+                Payment ID: <span className="font-mono bg-gray-100 px-2 py-1 rounded">{paymentId}</span>
+              </p>
+            )}
           </div>
           <div className="text-center">
             <p className="text-gray-600 mb-4">

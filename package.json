@@ -1,19 +1,17 @@
 {
-  "name": "happiness",
-  "version": "0.1.0",
+  "name": "unstuck-masterclass",
+  "version": "1.0.0",
+  "description": "UNSTUCK Masterclass Landing Page with Razorpay Payment Integration",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint",
+    "export": "next export"
   },
   "dependencies": {
-    "bcryptjs": "^3.0.2",
-    "js-cookie": "^3.0.5",
-    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.545.0",
-    "mongoose": "^8.19.1",
     "next": "15.5.4",
     "razorpay": "^2.9.6",
     "react": "19.1.0",
@@ -25,5 +23,19 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
     "tailwindcss": "^4"
-  }
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "keywords": [
+    "nextjs",
+    "razorpay",
+    "payment",
+    "masterclass",
+    "productivity",
+    "landing-page"
+  ],
+  "author": "Abimanue Analytix",
+  "license": "MIT"
 }
