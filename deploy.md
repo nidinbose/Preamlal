@@ -38,13 +38,18 @@ git push -u origin main
 
 ### 3. Environment Variables
 
-Add these in Vercel Dashboard → Project → Settings → Environment Variables:
+**IMPORTANT:** Set up environment variables in Vercel Dashboard, NOT in vercel.json
 
-```
-RAZORPAY_KEY_ID=rzp_test_your_key_here
-RAZORPAY_KEY_SECRET=your_secret_here
-NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_test_your_key_here
-```
+1. Go to Vercel Dashboard → Your Project → Settings → Environment Variables
+2. Add these three variables:
+
+| Name | Value | Environment |
+|------|-------|-------------|
+| `RAZORPAY_KEY_ID` | `rzp_test_your_key_here` | Production, Preview, Development |
+| `RAZORPAY_KEY_SECRET` | `your_secret_here` | Production, Preview, Development |
+| `NEXT_PUBLIC_RAZORPAY_KEY_ID` | `rzp_test_your_key_here` | Production, Preview, Development |
+
+**Note:** Make sure to enable the variables for all environments (Production, Preview, Development)
 
 ### 4. Razorpay Configuration
 

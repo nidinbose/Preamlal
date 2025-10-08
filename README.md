@@ -71,10 +71,11 @@ Visit `http://localhost:3000` to see your landing page.
 2. **Connect to Vercel**
    - Go to [vercel.com](https://vercel.com)
    - Import your GitHub repository
-   - Add environment variables in Vercel dashboard:
-     - `RAZORPAY_KEY_ID`
-     - `RAZORPAY_KEY_SECRET`
-     - `NEXT_PUBLIC_RAZORPAY_KEY_ID`
+   - Go to Project Settings → Environment Variables
+   - Add these variables for all environments (Production, Preview, Development):
+     - `RAZORPAY_KEY_ID` = `rzp_test_your_key_here`
+     - `RAZORPAY_KEY_SECRET` = `your_secret_here`
+     - `NEXT_PUBLIC_RAZORPAY_KEY_ID` = `rzp_test_your_key_here`
 
 3. **Deploy**
    - Vercel will automatically deploy on every push
